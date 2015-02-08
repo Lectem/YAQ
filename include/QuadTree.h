@@ -2,10 +2,11 @@
 
 #include <vector>
 #include "AABB.h"
-
+#include <iostream>
+using namespace std;
 namespace YAQT
 {
-    template<class Object, class T = double, int MAX_OBJECTS = 10,int MAX_LEVELS = 5>
+    template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
     class QuadTree {
         using _AABB = AABB<T>;
         class QuadTreeObject
@@ -19,8 +20,8 @@ namespace YAQT
 
             }
         };
-        int _level;
-        int _total_items;
+        int _level=0;
+        int _total_items=0;
         std::vector<QuadTreeObject> _objects;
         _AABB _bounds;
         QuadTree<Object,T>* _parent;
@@ -32,17 +33,72 @@ namespace YAQT
             _nodes[1]=new QuadTree(_bounds.getRegion(_AABB::Region::NE),this);
             _nodes[2]=new QuadTree(_bounds.getRegion(_AABB::Region::SW),this);
             _nodes[3]=new QuadTree(_bounds.getRegion(_AABB::Region::SE),this);
+            cout << "new level" << endl;
         }
+
+        void moveNodesIntoChildren()
+        {
+            for(auto it =_objects.rbegin();it != _objects.rend();++it)
+            {
+                for(int i=0;i<4;++i)
+                {
+                    if(_nodes[i]->push(*it))
+                    {
+                        _objects.erase(std::next(it).base());
+                        i=4;
+                    }
+                }
+
+            }
+        }
+
         void innerAdd(QuadTreeObject o)
         {
             _total_items++;
             _objects.push_back(o);
+            cout << "object added at level " << _level << endl;
+        }
+
+        void getAll(vector<QuadTreeObject>& res)
+        {
+            res.insert(res.end(), _objects.begin(),_objects.end());
+            if(_nodes[0])
+            {
+                for(int i=0;i<4;++i)
+                {
+                    _nodes[i]->getAll(res);
+                }
+            }
         }
 
 
+        void getZone(_AABB zone,vector<QuadTreeObject>& res)
+        {
+        //TODO can do faster with a litle more checking
+            if(zone.contains(_bounds))
+            {
+                res.reserve(_total_items);
+                getAll(res);
+            }
+            else
+            {
+                if(_nodes[0])
+                {
+                    for(int i=0;i<4;i++)
+                    {
+                        _nodes[i]->getZone(zone,res);
+                    }
+                }
+            }
+        }
+
     public:
         QuadTree(_AABB dimensions,QuadTree<Object,T> * parent = nullptr):
-                _bounds(dimensions),_parent(parent) {}
+                _bounds(dimensions),_parent(parent)
+        {
+            if(_parent)_level=_parent->_level+1;
+            else _level=0;
+        }
 
         ~QuadTree()
         {
@@ -64,15 +120,46 @@ namespace YAQT
                         return true;
                     }
                     createChildren();
+                    moveNodesIntoChildren();
+                    std::cout << "test" << std::endl;
 
                 }
+
+                for(int i=0;i<4;++i)
+                {
+                    if(_nodes[i]->push(o))
+                    {
+                        _total_items++;
+                        return true;
+                    }
+                }
+                innerAdd(o);
+                return true;
             }
             //this object doesn't fit in this quadtree
             return false;
         }
         bool push(_AABB aabb,Object* o)
         {
-            return push(QuadTreeObject(aabb,o));
+            QuadTreeObject obj(aabb,o);
+            return push(obj);
+        }
+
+        vector<QuadTreeObject> queryAABB(_AABB zone)
+        {
+            vector<QuadTreeObject> res;
+            getZone(zone,res);
+            return res;
+        }
+
+        void display()
+        {
+            cout <<"level "<< _level <<"\t";
+            for(int i=0;i<_level;++i)cout << '-';
+            cout <<_objects.size() << endl;
+            if(_nodes[0])
+                for(int i=0;i<4;++i)
+                    _nodes[i]->display();
         }
     };
 }
