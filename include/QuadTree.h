@@ -64,6 +64,7 @@ namespace YAQT
                         return true;
                     }
                     createChildren();
+
                 }
             }
             //this object doesn't fit in this quadtree
