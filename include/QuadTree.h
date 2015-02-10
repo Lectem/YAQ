@@ -24,8 +24,8 @@ namespace YAQT
         int _total_items=0;
         std::vector<QuadTreeObject> _objects;
         _AABB _bounds;
-        QuadTree<Object,T>* _parent;
-        QuadTree<Object,T>* _nodes[4]={};
+        QuadTree* _parent;
+        QuadTree* _nodes[4]={};
 
         void createChildren()
         {
@@ -74,7 +74,6 @@ namespace YAQT
 
         void getZone(_AABB zone,vector<QuadTreeObject>& res)
         {
-        //TODO can do faster with a litle more checking
             if(zone.contains(_bounds))
             {
                 res.reserve(_total_items);
@@ -82,18 +81,33 @@ namespace YAQT
             }
             else
             {
+                for(auto &o : _objects)
+                {
+                    if(o._aabb.intersect(zone))
+                    {
+                        res.push_back(o);
+                    }
+                }
                 if(_nodes[0])
                 {
                     for(int i=0;i<4;i++)
                     {
-                        _nodes[i]->getZone(zone,res);
+                        //Break if we know that the zone is fully contained by a region
+                        if(_nodes[i]->_bounds.intersect(zone))
+                        {
+                            _nodes[i]->getZone(zone,res);
+                            if(_nodes[i]->_bounds.contains(zone))
+                            {
+                                break;
+                            }
+                        }
                     }
                 }
             }
         }
 
     public:
-        QuadTree(_AABB dimensions,QuadTree<Object,T> * parent = nullptr):
+        QuadTree(_AABB dimensions,QuadTree * parent = nullptr):
                 _bounds(dimensions),_parent(parent)
         {
             if(_parent)_level=_parent->_level+1;

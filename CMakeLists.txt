@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.4)
 
-project(YAQT CXX)
+project(YAQ CXX C)
 
 message(status ${CMAKE_INCLUDE_PATH})
 
@@ -26,9 +26,6 @@ if ((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR CMAKE_COMPILER_IS_GNUCXX)
     endif()
 endif()
 
-set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
-set(CMAKE_BUILD_TYPE Release)
-
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
@@ -37,12 +34,5 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
 
 
 include_directories(include)
-
-
-file(
-        GLOB_RECURSE
-        source_files
-        include/*
-)
 
 add_executable(example1 examples/example1.cpp)

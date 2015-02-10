@@ -41,4 +41,13 @@ namespace YAQT
                 x+h >= other.w+other.w && y+h>= other.y+other.h;
     }
 
+
+    template <class T>
+    bool AABB<T>::intersect(AABB const &other)
+    {
+        return x < other.x+other.w && x+w > other.x &&
+                y < other.y+other.h && y+h >other.y;
+
+    }
+
 }
