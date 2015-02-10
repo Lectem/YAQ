@@ -35,4 +35,4 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
 
 include_directories(include)
 
-add_executable(example1 examples/example1.cpp)
+add_executable("${PROJECT_NAME}example1" examples/example1.cpp)
