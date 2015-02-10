@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace YAQT 
+namespace YAQT
 {
     template<class T = double>
     struct AABB {
@@ -35,19 +35,19 @@ namespace YAQT
 
 
     template <class T>
-    bool AABB<T>::contains(AABB const &other)
-    {
-        return x <= other.x && y <= other.y &&
-                x+h >= other.w+other.w && y+h>= other.y+other.h;
-    }
-
-
-    template <class T>
     bool AABB<T>::intersect(AABB const &other)
     {
         return x < other.x+other.w && x+w > other.x &&
                 y < other.y+other.h && y+h >other.y;
+    }
 
+
+
+    template <class T>
+    bool AABB<T>::contains(AABB const &other)
+    {
+        return x <= other.x && y <= other.y &&
+                x+h >= other.w+other.w && y+h>= other.y+other.h;
     }
 
 }
