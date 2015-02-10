@@ -71,7 +71,6 @@ namespace YAQ
         _nodes[1]=new QuadTree(_bounds.getRegion(_AABB::Region::NE),this);
         _nodes[2]=new QuadTree(_bounds.getRegion(_AABB::Region::SW),this);
         _nodes[3]=new QuadTree(_bounds.getRegion(_AABB::Region::SE),this);
-        cout << "new level" << endl;
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
@@ -105,8 +104,6 @@ namespace YAQ
                 }
                 createChildren();
                 moveNodesIntoChildren();
-                std::cout << "test" << std::endl;
-
             }
 
             for(int i=0;i<4;++i)
