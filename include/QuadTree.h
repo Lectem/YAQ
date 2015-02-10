@@ -8,7 +8,8 @@ namespace YAQ
 {
     template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
     class QuadTree {
-        using _AABB = AABB<T>;
+    public:using _AABB = AABB<T>;
+    private:
         class QuadTreeObject
         {
             friend class QuadTree;
