@@ -61,7 +61,6 @@ namespace YAQ
     {
         _total_items++;
         _objects.push_back(o);
-        cout << "object added at level " << _level << endl;
     }
 
 
