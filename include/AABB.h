@@ -11,7 +11,7 @@ namespace YAQ
     * \class AABB
     * \brief Small implementation of a Rectangle class
     *
-    * A basic structure and collision detection for rectangles.
+    * A basic template structure with collision detection for rectangles.
     */
     template<class T = double>
     struct AABB {
@@ -24,25 +24,18 @@ namespace YAQ
             SW,///< South-West (Bottom left)
             SE ///< South-East (Bottom right)
         };
-        ///@{
-        /**
-        * position of the rectangle
-        */
-        T x, y;
-        ///@}
 
-        ///@{
-        /**
-        * size of the rectangle
-        */
+        T x, y;
         T w, h;
-        ///@}
+
 
         AABB(T x=0,T y=0,T w=0,T h=0):
                 x(x),y(y),w(w),h(h) {}
 
-        bool intersect(AABB const &other);
-        bool contains(AABB const &other);
+        /**
+        * \param r The Region of the rectangle you need
+        * \return the rectangle corresponding to the Region r
+        */
         AABB getRegion(Region r)
         {
             switch (r)
@@ -59,6 +52,17 @@ namespace YAQ
                     return *this;
             }
         }
+
+        /**
+        * \return true if the two rectangles intersect, false otherwise
+        */
+        bool intersect(AABB const &other);
+
+        /**
+        * \return true if the AABB contains the \p other rectangle, false otherwise
+        */
+        bool contains(AABB const &other);
+
     };
 
 

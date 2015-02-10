@@ -1,15 +1,41 @@
+/**
+* \file QuadTree.h
+* \author Lectem
+* \brief A simple Quadtree implementation
+*/
+
 #pragma once
 
 #include <vector>
 #include "AABB.h"
 #include <iostream>
+
+
 using namespace std;
+
+
 namespace YAQ
 {
+
+    /**
+    * \class QuadTree
+    * \brief A basic Quadtree implementation
+    *
+    * Quadtrees are useful for 2D space partitioning and quick lookup based on a region of the space.
+    * \tparam Object The type of objects stored in the tree
+    * \tparam Type of number used by the coordinates system
+    * \tparam MAX_OBJECTS Maximum number of objects per node
+    * \tparam MAX_LEVELS Would limit the size of the tree ? Not implemented.
+    */
     template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
     class QuadTree {
     public:
-        using _AABB = AABB<T>;
+        using _AABB = AABB<T>;//< Prevents confusion with other AABB types
+
+        /**
+        * \struct QuadTreeObject
+        * A structure holding the object and its boundaries (its AABB rectangle)
+        */
         struct QuadTreeObject
         {
             friend class QuadTree;
@@ -34,6 +60,10 @@ namespace YAQ
         void getZone(_AABB zone,vector<QuadTreeObject>& res);
 
     public:
+        /**
+        * \param dimensions All objects must be strictly within the bounds of the tree, or will not be added to it.
+        * \param parent A pointer to the parent node of this tree.
+        */
         QuadTree(_AABB dimensions,QuadTree * parent = nullptr):
                 _bounds(dimensions),_parent(parent)
         {
@@ -49,12 +79,36 @@ namespace YAQ
             }
         }
 
+        /**
+        * \brief Adds a QuadTreeObject to the tree
+        * \param o The QuadTreeObject to be added
+        * \return true on success
+        * \return false on failure
+        */
         bool push(QuadTreeObject o);
+        /**
+        * \brief Adds an object to the tree
+        * \param o The Object to be added
+        * \param aabb the rectangle associated to the object
+        * \return true on success
+        * \return false on failure
+        */
         bool push(_AABB aabb,Object o);
 
+
+        /**
+        * \brief Lookup method
+        *
+        * This method will create a list of the objects that are intersecting a given zone of the space
+        * \param zone The rectangle that defines the area of the query.
+        * \return a vector containing a COPY of the QuadTreeObjects which _aabb intersects \p zone
+        */
         vector<QuadTreeObject> queryAABB(_AABB zone);
 
-        void display();
+        /**
+        * \brief A simple text display of the quadtree. Only works if object can be streamed to cout.
+        */
+        void cout_display();
     };
 
 
@@ -188,7 +242,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::display()
+    void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::cout_display()
     {
         cout <<"level "<< _level <<"\t";
         cout << "(" << _bounds.x <<","<< _bounds.y <<")\t";

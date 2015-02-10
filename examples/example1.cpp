@@ -21,7 +21,7 @@ int main(int argc, char * argv[])
     test.push(AABB<double>(350,350,125,125),i);
     test.push(AABB<double>(350,350,125,125),i);
     test.push(AABB<double>(350,350,2,2),i);
-    test.display();
+    test.cout_display();
     auto res=test.queryAABB(AABB<double>(0,0,100,100));
     cout << res.size() << endl;
 
