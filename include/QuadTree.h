@@ -14,7 +14,7 @@ namespace YAQ
         {
             friend class QuadTree;
             _AABB _aabb;
-            Object* _object;
+            Object _object;
             explicit QuadTreeObject(AABB<T> aabb,Object* o):
                     _aabb(aabb),_object(o) {}
         };
