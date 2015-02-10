@@ -8,9 +8,9 @@ namespace YAQ
 {
     template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
     class QuadTree {
-    public:using _AABB = AABB<T>;
-    private:
-        class QuadTreeObject
+    public:
+        using _AABB = AABB<T>;
+        struct QuadTreeObject
         {
             friend class QuadTree;
             _AABB _aabb;
@@ -18,6 +18,8 @@ namespace YAQ
             explicit QuadTreeObject(AABB<T> aabb,Object o):
                     _aabb(aabb),_object(o) {}
         };
+
+    private:
         int _level=0;
         int _total_items=0;
         std::vector<QuadTreeObject> _objects;
@@ -122,6 +124,13 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
+    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object o)
+    {
+        QuadTreeObject obj(aabb,o);
+        return push(obj);
+    }
+
+    template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
     void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::getAll(vector<QuadTreeObject>& res)
     {
         res.insert(res.end(), _objects.begin(),_objects.end());
@@ -171,13 +180,6 @@ namespace YAQ
 
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object o)
-    {
-        QuadTreeObject obj(aabb,o);
-        return push(obj);
-    }
-
-    template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
     vector<typename QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::QuadTreeObject>  QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::queryAABB(QuadTree::_AABB zone)
     {
         vector<QuadTreeObject> res;
@@ -189,8 +191,15 @@ namespace YAQ
     void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::display()
     {
         cout <<"level "<< _level <<"\t";
+        cout << "(" << _bounds.x <<","<< _bounds.y <<")\t";
+        cout << "(" << _bounds.x+ _bounds.w <<","<< _bounds.y+ _bounds.h <<")\t";
         for(int i=0;i<_level;++i)cout << '-';
-        cout <<_objects.size() << endl;
+        cout <<"\t"<<_objects.size() << "\t[";
+        for(auto o:_objects)
+        {
+            cout << " "<< o._object ;
+        }
+        cout <<" ]"<< endl;
         if(_nodes[0])
             for(int i=0;i<4;++i)
                 _nodes[i]->display();

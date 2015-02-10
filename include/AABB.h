@@ -8,10 +8,10 @@ namespace YAQ
 
         enum Region{NW,NE,SW,SE};
 
-        T x, y, h, w;
+        T x, y, w, h;
 
-        AABB(T x=0,T y=0,T h=0,T w=0):
-                x(x),y(y),h(h),w(w) {}
+        AABB(T x=0,T y=0,T w=0,T h=0):
+                x(x),y(y),w(w),h(h) {}
 
         bool intersect(AABB const &other);
         bool contains(AABB const &other);
@@ -24,9 +24,9 @@ namespace YAQ
                 case NE:
                     return AABB(x+w/2,y,w/2,h/2);
                 case SW:
-                    return AABB(x,y+h/2,h/2,w/2);
+                    return AABB(x,y+h/2,w/2,h/2);
                 case SE:
-                    return AABB(x+w/2,y+h/2);
+                    return AABB(x+w/2,y+h/2,w/2,h/2);
                 default:
                     return *this;
             }
@@ -37,8 +37,10 @@ namespace YAQ
     template <class T>
     bool AABB<T>::intersect(AABB const &other)
     {
-        return x < other.x+other.w && x+w > other.x &&
-                y < other.y+other.h && y+h >other.y;
+        return !((x >= other.x+other.w || other.x >= x+w) ||
+                (y >= other.y+other.h|| other.y >= y+h));
+
+
     }
 
 
@@ -47,7 +49,7 @@ namespace YAQ
     bool AABB<T>::contains(AABB const &other)
     {
         return x <= other.x && y <= other.y &&
-                x+h >= other.w+other.w && y+h>= other.y+other.h;
+                x+w >= other.x+other.w && y+h>= other.y+other.h;
     }
 
 }
