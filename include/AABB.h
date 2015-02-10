@@ -1,14 +1,42 @@
 #pragma once
 
+/**
+* \file AABB.h
+* \brief AABB class.
+*/
 
 namespace YAQ
 {
+    /**
+    * \class AABB
+    * \brief Small implementation of a Rectangle class
+    *
+    * A basic structure and collision detection for rectangles.
+    */
     template<class T = double>
     struct AABB {
+        /**
+        * \brief Region of the rectangle
+        */
+        enum Region{
+            NW,///< North-West (Top left)
+            NE,///< North-East (Top right)
+            SW,///< South-West (Bottom left)
+            SE ///< South-East (Bottom right)
+        };
+        ///@{
+        /**
+        * position of the rectangle
+        */
+        T x, y;
+        ///@}
 
-        enum Region{NW,NE,SW,SE};
-
-        T x, y, w, h;
+        ///@{
+        /**
+        * size of the rectangle
+        */
+        T w, h;
+        ///@}
 
         AABB(T x=0,T y=0,T w=0,T h=0):
                 x(x),y(y),w(w),h(h) {}
@@ -42,8 +70,6 @@ namespace YAQ
 
 
     }
-
-
 
     template <class T>
     bool AABB<T>::contains(AABB const &other)

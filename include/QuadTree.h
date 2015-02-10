@@ -195,7 +195,7 @@ namespace YAQ
         cout << "(" << _bounds.x+ _bounds.w <<","<< _bounds.y+ _bounds.h <<")\t";
         for(int i=0;i<_level;++i)cout << '-';
         cout <<"\t"<<_objects.size() << "\t[";
-        for(auto o:_objects)
+        for(auto &o:_objects)
         {
             cout << " "<< o._object ;
         }
