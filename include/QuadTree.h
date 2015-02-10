@@ -15,7 +15,7 @@ namespace YAQ
             friend class QuadTree;
             _AABB _aabb;
             Object _object;
-            explicit QuadTreeObject(AABB<T> aabb,Object* o):
+            explicit QuadTreeObject(AABB<T> aabb,Object o):
                     _aabb(aabb),_object(o) {}
         };
         int _level=0;
@@ -48,7 +48,7 @@ namespace YAQ
         }
 
         bool push(QuadTreeObject o);
-        bool push(_AABB aabb,Object* o);
+        bool push(_AABB aabb,Object o);
 
         vector<QuadTreeObject> queryAABB(_AABB zone);
 
@@ -175,7 +175,7 @@ namespace YAQ
 
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object *o)
+    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object o)
     {
         QuadTreeObject obj(aabb,o);
         return push(obj);
