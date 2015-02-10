@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace YAQT
+namespace YAQ
 {
     template<class T = double>
     struct AABB {

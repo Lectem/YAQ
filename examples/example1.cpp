@@ -1,10 +1,10 @@
 #include <string>
 #include "QuadTree.h"
 
-using namespace YAQT;
+using namespace YAQ;
 int main(int argc, char * argv[])
 {
-    YAQT::QuadTree<int> test( AABB<double>(0,0,500,500)  );
+    YAQ::QuadTree<int> test( AABB<double>(0,0,500,500)  );
     int i;
     test.push(AABB<double>(20,50,1,1),&i);
     test.push(AABB<double>(0,10,1,1),&i);

@@ -4,7 +4,7 @@
 #include "AABB.h"
 #include <iostream>
 using namespace std;
-namespace YAQT
+namespace YAQ
 {
     template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
     class QuadTree {
