@@ -41,7 +41,7 @@ namespace YAQ
             friend class QuadTree;
             _AABB _aabb;
             Object _object;
-            explicit QuadTreeObject(AABB<T> aabb,Object o):
+            explicit QuadTreeObject(AABB<T> &aabb,Object &o):
                     _aabb(aabb),_object(o) {}
         };
 
@@ -55,7 +55,7 @@ namespace YAQ
 
         void createChildren();
         void moveNodesIntoChildren();
-        void innerAdd(QuadTreeObject o);
+        void innerAdd(QuadTreeObject& o);
         void getAll(vector<QuadTreeObject>& res);
         void getZone(_AABB zone,vector<QuadTreeObject>& res);
 
@@ -85,7 +85,7 @@ namespace YAQ
         * \return true on success
         * \return false on failure
         */
-        bool push(QuadTreeObject o);
+        bool push(QuadTreeObject &o);
         /**
         * \brief Adds an object to the tree
         * \param o The Object to be added
@@ -93,7 +93,7 @@ namespace YAQ
         * \return true on success
         * \return false on failure
         */
-        bool push(_AABB aabb,Object o);
+        bool push(_AABB aabb,Object &o);
 
 
         /**
@@ -108,12 +108,12 @@ namespace YAQ
         /**
         * \brief A simple text display of the quadtree. Only works if object can be streamed to cout.
         */
-        void cout_display();
+        void cout_display() const;
     };
 
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::innerAdd(QuadTree::QuadTreeObject o)
+    void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::innerAdd(QuadTree::QuadTreeObject &o)
     {
         _total_items++;
         _objects.push_back(o);
@@ -138,6 +138,7 @@ namespace YAQ
             {
                 if(_nodes[i]->push(*it))
                 {
+                    //std::next needed for reverse iterator when deleting
                     _objects.erase(std::next(it).base());
                     i=4;
                 }
@@ -147,7 +148,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::QuadTreeObject o)
+    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::QuadTreeObject &o)
     {
         if(_bounds.contains(o._aabb))
         {
@@ -178,7 +179,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object o)
+    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object &o)
     {
         QuadTreeObject obj(aabb,o);
         return push(obj);
@@ -242,7 +243,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::cout_display()
+    void QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::cout_display() const
     {
         cout <<"level "<< _level <<"\t";
         cout << "(" << _bounds.x <<","<< _bounds.y <<")\t";
@@ -256,7 +257,7 @@ namespace YAQ
         cout <<" ]"<< endl;
         if(_nodes[0])
             for(int i=0;i<4;++i)
-                _nodes[i]->display();
+                _nodes[i]->cout_display();
     }
 
 }
