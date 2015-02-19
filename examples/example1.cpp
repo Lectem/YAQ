@@ -21,9 +21,14 @@ int main(int argc, char * argv[])
     test.push(AABB<double>(350,350,125,125),i);
     test.push(AABB<double>(350,350,125,125),i);
     test.push(AABB<double>(350,350,2,2),i);
-    test.cout_display();
-    auto res=test.queryAABB(AABB<double>(0,0,100,100));
-    cout << res.size() << endl;
+    test.display();
+    vector<QuadTree<int>::QuadTreeObject > queryAABB = test.queryAABB(AABB<double>(0,0,100,100));
+    cout << "found "<< queryAABB.size() << " objects" << endl;
+    if(queryAABB.size()>0)
+    {
+        queryAABB[0].update(AABB<double>(350,350,2,2));
+    }
+
 
     return 0;
 }
