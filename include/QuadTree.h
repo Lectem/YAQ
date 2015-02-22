@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "QuadTreeNode.h"
 
 namespace YAQ {
@@ -16,13 +17,13 @@ namespace YAQ {
     * \tparam MAX_LEVELS Would limit the size of the tree ? Not implemented.
     */
     template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
-    class QuadTree : public QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>
+    class QuadTree
     {
     public:
         using Node = QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>;
-        using typename Node::_AABB ;
-        using typename Node::QuadTreeObject;
-        QuadTree(_AABB dimensions):Node(dimensions, nullptr) {}
+        using _AABB = typename Node::_AABB ;
+        using QuadTreeObject = typename Node::QuadTreeObject;
+        QuadTree(_AABB dimensions):root(new Node(dimensions, nullptr)) {}
 
 
         /**
@@ -66,17 +67,18 @@ namespace YAQ {
 
     private:
         vector<QuadTreeObject> _crossingObjects;
+        unique_ptr<Node> root = nullptr;
     };
 
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
     bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::QuadTreeObject &o)
     {
-        if(this->_bounds.contains(o._aabb))
+        if(root->_bounds.contains(o._aabb))
         {
-            return static_cast<Node*>(this)->push(o);
+            return root->push(o);
         }
-        else if(this->_bounds.intersect(o._aabb))
+        else if(root->_bounds.intersect(o._aabb))
         {
             _crossingObjects.push_back(o);
             return true;
@@ -100,7 +102,7 @@ namespace YAQ {
             if(o._aabb.intersect(zone))
                 res.push_back(o);
         }
-        this->getZone(zone,res);
+        root->getZone(zone,res);
         return res;
     }
 
@@ -115,7 +117,7 @@ namespace YAQ {
             cout << " "<< o._object ;
         }
         cout <<" ]"<< endl;
-        static_cast<Node const *>(this)->cout_display();
+        root->cout_display();
     }
 
 }

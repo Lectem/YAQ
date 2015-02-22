@@ -29,11 +29,15 @@ namespace YAQ
     * \tparam MAX_OBJECTS Maximum number of objects per node
     * \tparam MAX_LEVELS Would limit the size of the tree ? Not implemented.
     */
+    template<class Object, class T, int MAX_OBJECTS ,int MAX_LEVELS>
+    class QuadTree;
+
     template<class Object, class T = double, int MAX_OBJECTS = 5,int MAX_LEVELS = 5>
-    class QuadTreeNode {
+    class QuadTreeNode{
     public:
         using _AABB = AABB<T>;//< Prevents confusion with other AABB types
 
+        friend class QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>;
         /**
         * \struct QuadTreeObject
         * A structure holding the object and its boundaries (its AABB rectangle)
