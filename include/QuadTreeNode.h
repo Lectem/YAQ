@@ -48,7 +48,7 @@ namespace YAQ
             _AABB _aabb;
             Object _object;
             QuadTreeNode *node= nullptr;
-            explicit QuadTreeObject(AABB<T> &aabb,Object &o):
+            explicit QuadTreeObject(AABB<T> const &aabb,Object const &o):
                     _aabb(aabb),_object(o) {}
         public:
             void update(_AABB const &newAABB);
@@ -68,7 +68,7 @@ namespace YAQ
         * \return true on success
         * \return false on failure
         */
-        bool push(QuadTreeObject &o);
+        bool push(QuadTreeObject const &o);
         /**
         * \brief Adds an object to the tree
         * \param o The Object to be added
@@ -76,7 +76,7 @@ namespace YAQ
         * \return true on success
         * \return false on failure
         */
-        bool push(_AABB aabb,Object &o);
+        bool push(_AABB aabb,Object const &o);
 
 
         /**
@@ -103,7 +103,7 @@ namespace YAQ
 
         void createChildren();
         void moveNodesIntoChildren();
-        void innerAdd(QuadTreeObject& o);
+        void innerAdd(QuadTreeObject const &o);
         void getAll(vector<QuadTreeObject>& res);
         void getZone(_AABB zone,vector<QuadTreeObject>& res);
     };
@@ -126,7 +126,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    void QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>::innerAdd(QuadTreeNode::QuadTreeObject &o)
+    void QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>::innerAdd(QuadTreeNode::QuadTreeObject const &o)
     {
         _total_items++;
         _objects.push_back(o);
@@ -162,7 +162,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTreeNode::QuadTreeObject &o)
+    bool QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTreeNode::QuadTreeObject const &o)
     {
         if(_bounds.contains(o._aabb))
         {
@@ -193,7 +193,7 @@ namespace YAQ
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTreeNode::_AABB aabb, Object &o)
+    bool QuadTreeNode<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTreeNode::_AABB aabb, Object const &o)
     {
         QuadTreeObject obj(aabb,o);
         return push(obj);

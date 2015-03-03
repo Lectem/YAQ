@@ -37,7 +37,7 @@ namespace YAQ {
         * \return true on success
         * \return false on failure
         */
-        bool push(QuadTreeObject &o);
+        bool push(QuadTreeObject const &o);
 
         /**
         * \brief Adds an object to the tree
@@ -51,7 +51,7 @@ namespace YAQ {
         * \return true on success
         * \return false on failure
         */
-        bool push(_AABB aabb,Object &o);
+        bool push(_AABB aabb,Object const &o);
 
 
         /**
@@ -72,7 +72,7 @@ namespace YAQ {
 
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::QuadTreeObject &o)
+    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::QuadTreeObject const &o)
     {
         if(root->_bounds.contains(o._aabb))
         {
@@ -87,10 +87,10 @@ namespace YAQ {
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
-    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object &o)
+    bool QuadTree<Object,T,MAX_OBJECTS,MAX_LEVELS>::push(QuadTree::_AABB aabb, Object const &o)
     {
         QuadTreeObject obj(aabb,o);
-        return push(obj);;
+        return push(obj);
     }
 
     template<class Object, class T, int MAX_OBJECTS,int MAX_LEVELS>
