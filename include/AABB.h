@@ -56,18 +56,18 @@ namespace YAQ
         /**
         * \return true if the two rectangles intersect, false otherwise
         */
-        bool intersect(AABB const &other);
+        bool intersect(AABB const &other) const ;
 
         /**
         * \return true if the AABB contains the \p other rectangle, false otherwise
         */
-        bool contains(AABB const &other);
+        bool contains(AABB const &other) const;
 
     };
 
 
     template <class T>
-    bool AABB<T>::intersect(AABB const &other)
+    bool AABB<T>::intersect(AABB const &other) const
     {
         return !((x >= other.x+other.w || other.x >= x+w) ||
                 (y >= other.y+other.h|| other.y >= y+h));
@@ -76,7 +76,7 @@ namespace YAQ
     }
 
     template <class T>
-    bool AABB<T>::contains(AABB const &other)
+    bool AABB<T>::contains(AABB const &other) const
     {
         return x <= other.x && y <= other.y &&
                 x+w >= other.x+other.w && y+h>= other.y+other.h;
